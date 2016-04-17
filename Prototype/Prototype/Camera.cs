@@ -18,6 +18,9 @@ namespace Prototype
         MouseState pmState;
         public bool Focused { get; private set; }
         int lastValue = 0;
+        bool fixedMouse;
+
+        bool pressed = false;
 
         /// <summary>
         /// if already focsed the Vector has no effect
@@ -62,6 +65,8 @@ namespace Prototype
 
         private void ControlMouse()
         {
+            CamaraPosition = new Vector3(CamaraPosition.X, 20, CamaraPosition.Z);
+
             mState = Mouse.GetState();
 
             if(mState.ScrollWheelValue != lastValue)
@@ -106,7 +111,17 @@ namespace Prototype
             System.Diagnostics.Debug.WriteLine("MousePos.Y: " + mState.Y);
             System.Diagnostics.Debug.WriteLine("MouseWheel: " + mState.ScrollWheelValue);
 
-            //Mouse.SetPosition(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight / 2);
+            if (Keyboard.GetState().IsKeyDown(Keys.X) && !pressed)
+            {
+                fixedMouse = !fixedMouse;
+                pressed = true;
+            }
+
+            if(!Keyboard.GetState().IsKeyDown(Keys.X) && pressed)
+                pressed = false;
+
+            if(fixedMouse)
+            Mouse.SetPosition(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight / 2);
             pmState = Mouse.GetState();
         }
 
