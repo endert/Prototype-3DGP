@@ -65,6 +65,8 @@ namespace Prototype
 
         private void ControlMouse()
         {
+            CamaraPosition = new Vector3(CamaraPosition.X, 20, CamaraPosition.Z);
+
             mState = Mouse.GetState();
 
             if(mState.ScrollWheelValue != lastValue)
