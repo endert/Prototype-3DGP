@@ -15,10 +15,11 @@ namespace Prototype
         Vector2 position;
         Vector3 posModel;
         Texture2D texture;
+        KeyboardState kState;
         KeyboardState previousState;
         bool keyboardControl = true;
         float angle;
-
+       
         ////BasicEffect for rendering
         //BasicEffect basicEffect;
 
@@ -33,6 +34,8 @@ namespace Prototype
             graphics = new GraphicsDeviceManager(this);
             camera = new Camera(graphics);
             Content.RootDirectory = "Content";
+            graphics.PreferredBackBufferHeight = 1080;
+            graphics.PreferredBackBufferWidth = 1920;
         }
 
         protected override void Initialize()
@@ -85,14 +88,14 @@ namespace Prototype
 
         private void UpdateKeyboard(KeyboardState state)
         {
-            System.Text.StringBuilder sb = new System.Text.StringBuilder();
-            foreach (var key in state.GetPressedKeys())
-                sb.Append("Key: ").Append(key).Append(" pressed ");
+            //System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            //foreach (var key in state.GetPressedKeys())
+            //    sb.Append("Key: ").Append(key).Append(" pressed ");
 
-            if (sb.Length > 0)
-                System.Diagnostics.Debug.WriteLine(sb.ToString());
-            else
-                System.Diagnostics.Debug.WriteLine("No Keys pressed");
+            //if (sb.Length > 0)
+            //    System.Diagnostics.Debug.WriteLine(sb.ToString());
+            //else
+            //    System.Diagnostics.Debug.WriteLine("No Keys pressed");
 
             //if (state.IsKeyDown(Keys.D))
             //    position.X += 10;
@@ -117,18 +120,11 @@ namespace Prototype
 
         private void UpdateMouse()
         {
-            MouseState mState = Mouse.GetState();
-
-            position.X = mState.X;
-            position.Y = mState.Y;
-
-            if (mState.MiddleButton == ButtonState.Pressed)
-                Mouse.SetPosition(graphics.GraphicsDevice.Viewport.Width / 2, graphics.GraphicsDevice.Viewport.Height / 2);
         }
 
         protected override void Update(GameTime gameTime)
         {
-            KeyboardState kState = Keyboard.GetState();
+            kState = Keyboard.GetState();
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || kState.IsKeyDown(Keys.Escape))
                 Exit();
@@ -137,7 +133,7 @@ namespace Prototype
                 keyboardControl = !keyboardControl;
 
             if (keyboardControl) UpdateKeyboard(kState);
-            else UpdateMouse();
+            //else UpdateMouse();
 
             camera.Update(kState, previousState);
            

@@ -9,10 +9,11 @@ namespace Prototype
         GraphicsDeviceManager graphics;
         Vector3 camTarget;
         Vector3 camPosition;
-        Matrix projectionMatrix { get; set; }
-        Matrix viewMatrix { get; set; }
-        public Matrix worldMatrix { get; set; }
+        Matrix projectionMatrix;
+        Matrix viewMatrix;
+        public Matrix worldMatrix;
         bool orbit = false;
+        MouseState mState;
 
         public Camera(GraphicsDeviceManager g)
         {
@@ -28,7 +29,7 @@ namespace Prototype
             worldMatrix = Matrix.CreateWorld(camTarget, Vector3.Forward, Vector3.Up);
         }
 
-        public void Update(KeyboardState state, KeyboardState pState)
+        private void ControlKeyboard(KeyboardState state, KeyboardState pState)
         {
             if (state.IsKeyDown(Keys.Left))
             {
@@ -62,6 +63,23 @@ namespace Prototype
             {
                 orbit = !orbit;
             }
+        }
+
+        private void ControlMouse()
+        {
+            mState = Mouse.GetState();
+
+            camTarget.X = mState.X;
+            camTarget.Y = mState.Y;
+            
+            System.Diagnostics.Debug.WriteLine("MousePos.X: " + mState.X);
+            System.Diagnostics.Debug.WriteLine("MousePos.Y: " + mState.Y);
+        }
+
+        public void Update(KeyboardState state, KeyboardState pState)
+        {
+            //ControlKeyboard(state, pState);
+            ControlMouse();
 
             if (orbit)
             {
