@@ -60,7 +60,7 @@ namespace Prototype
             currentGameState = gameState.Update(kState, previousState);
             if(currentGameState != previousGameState)
             {
-
+                HandleGameState();
             }
 
             base.Update(gameTime);
@@ -72,6 +72,24 @@ namespace Prototype
             gameState.Draw();
 
             base.Draw(gameTime);
+        }
+        
+        void HandleGameState()
+        {
+            switch (currentGameState)
+            {
+                case EGameState.InGame:
+                    gameState = new InGame(graphics, GraphicsDevice, Content);
+                    gameState.LoadContent();
+                    gameState.Initialize();
+                    break;
+
+                default:
+                    break;
+            }
+
+
+            previousGameState = currentGameState;
         }
 
     }
