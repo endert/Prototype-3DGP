@@ -21,7 +21,7 @@ namespace Prototype.GameStates
 
     interface IGameState : IDisposable
     {
-        EGameState Update(KeyboardState k, KeyboardState pk);
+        EGameState Update(KeyboardState k, KeyboardState pk, GameTime gt);
         void Draw();
         void Initialize();
         void LoadContent();

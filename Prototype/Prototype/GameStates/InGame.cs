@@ -56,10 +56,11 @@ namespace Prototype.GameStates
         ContentManager Content;
         float angle = 0;
         Camera camera;
-        Model dragon;
+        Dragon dragon;
         Model horse;
         Vector3 posModel;
         bool pressed;
+        float aspectRatio;
 
         Plane plane;
         Texture2D planeTexture;
@@ -85,11 +86,15 @@ namespace Prototype.GameStates
             
             effect = new BasicEffect(gDevice);
             camera.Initialize();
+
+            dragon = new Dragon();
+            dragon.Initialize(Content);
+
+            aspectRatio = gDevice.DisplayMode.AspectRatio;
         }
 
         public void LoadContent()
         {
-            dragon = Content.Load<Model>("Dragon 2.5_fbx");
             camera.ToggleFocus(posModel);
             horse = Content.Load<Model>("horse");
         
@@ -109,13 +114,11 @@ namespace Prototype.GameStates
 
             effect.View = Matrix.CreateLookAt(cameraPosition, cameraLookAtVector, cameraUpVector);
 
-            float aspectRatio = gDevice.DisplayMode.AspectRatio;
             float fieldOfView = MathHelper.ToRadians(90f);
             float nearClipPlane = 1;
             float farClipPlane = 200;
 
             effect.Projection = Matrix.CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearClipPlane, farClipPlane);
-
 
 
             foreach (var pass in effect.CurrentTechnique.Passes)
@@ -154,11 +157,12 @@ namespace Prototype.GameStates
             camera.worldMatrix = Matrix.CreateRotationY(angle) * Matrix.CreateTranslation(posModel);
         }
 
-        public EGameState Update(KeyboardState kState, KeyboardState previousState)
+        public EGameState Update(KeyboardState kState, KeyboardState previousState, GameTime gameTime)
         {
             UpdateKeyboard(kState);
 
             camera.Update(kState, previousState);
+            dragon.Update(gameTime);
 
             previousState = kState;
 
@@ -166,8 +170,8 @@ namespace Prototype.GameStates
         }
 
         public void Draw()
-        { 
-            camera.Draw(dragon);
+        {
+            dragon.Draw(camera.CamaraPosition, aspectRatio, camera);
             camera.Draw(horse);
             DrawGround();
         }

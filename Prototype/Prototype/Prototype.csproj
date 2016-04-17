@@ -39,6 +39,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Camera.cs" />
+    <Compile Include="Dragon.cs" />
     <Compile Include="GameStates\Credits.cs" />
     <Compile Include="GameStates\GameState.cs" />
     <Compile Include="GameStates\InGame.cs" />
