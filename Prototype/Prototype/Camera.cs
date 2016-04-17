@@ -107,9 +107,9 @@ namespace Prototype
                 CamaraPosition = CamaraLookAt + (50 / (CamaraLookAt - CamaraPosition).Length()) * (CamaraPosition - CamaraLookAt);
             }
 
-            System.Diagnostics.Debug.WriteLine("MousePos.X: " + mState.X);
-            System.Diagnostics.Debug.WriteLine("MousePos.Y: " + mState.Y);
-            System.Diagnostics.Debug.WriteLine("MouseWheel: " + mState.ScrollWheelValue);
+            //System.Diagnostics.Debug.WriteLine("MousePos.X: " + mState.X);
+            //System.Diagnostics.Debug.WriteLine("MousePos.Y: " + mState.Y);
+            //System.Diagnostics.Debug.WriteLine("MouseWheel: " + mState.ScrollWheelValue);
 
             if (Keyboard.GetState().IsKeyDown(Keys.X) && !pressed)
             {

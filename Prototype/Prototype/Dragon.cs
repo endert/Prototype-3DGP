@@ -14,6 +14,7 @@ namespace Prototype
     {
         Model model;
         float angle;
+        public BoundingSphere Boundingsphere { get { return model.Meshes[0].BoundingSphere; } }
 
         public void Initialize(ContentManager contentManager)
         {

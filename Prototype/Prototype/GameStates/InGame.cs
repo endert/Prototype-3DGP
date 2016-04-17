@@ -194,6 +194,11 @@ namespace Prototype.GameStates
 
             previousState = kState;
 
+            System.Diagnostics.Debug.WriteLine("Clear");
+            BoundingSphere horseBounding = new BoundingSphere(horse.Meshes[0].BoundingSphere.Center, horse.Meshes[0].BoundingSphere.Radius * 0.01f);
+            if (horseBounding.Intersects(dragon.Boundingsphere))
+                System.Diagnostics.Debug.WriteLine("Collision");
+
             return EGameState.InGame;
         }
 
