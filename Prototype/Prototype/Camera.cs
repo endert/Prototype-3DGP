@@ -36,7 +36,6 @@ namespace Prototype
             worldMatrix = Matrix.CreateWorld(camTarget, Vector3.Forward, Vector3.Up);
 
             Mouse.SetPosition(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight / 2);
-            
         }
 
         private void ControlKeyboard(KeyboardState state, KeyboardState pState)
