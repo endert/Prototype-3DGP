@@ -20,6 +20,7 @@ namespace Prototype.GameStates
         Camera camera;
         Model model;
         Vector3 posModel;
+        bool pressed;
 
         public InGame(GraphicsDeviceManager g, GraphicsDevice gD, ContentManager content)
         {
@@ -59,6 +60,15 @@ namespace Prototype.GameStates
                 posModel.Z -= 1;
             if (state.IsKeyDown(Keys.S))
                 posModel.Z += 1;
+
+            if (state.IsKeyDown(Keys.F)&& !pressed)
+            {
+                pressed = true;
+                camera.ToggleFocus(posModel);
+            }
+
+            if (pressed && !state.IsKeyDown(Keys.F))
+                pressed = false;
 
             camera.worldMatrix = Matrix.CreateRotationY(angle) * Matrix.CreateTranslation(posModel);
         }

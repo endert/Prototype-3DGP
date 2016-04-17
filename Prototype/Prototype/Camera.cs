@@ -8,14 +8,28 @@ namespace Prototype
     class Camera : IDisposable
     {
         GraphicsDeviceManager graphics;
-        Vector3 camTarget;
-        Vector3 camPosition;
+        public Vector3 CamaraLookAt { get; private set; }
+        public Vector3 CamaraPosition { get; private set; }
         Matrix projectionMatrix;
         Matrix viewMatrix;
         public Matrix worldMatrix;
         bool orbit = false;
         MouseState mState;
         MouseState pmState;
+        public bool Focused { get; private set; }
+        int lastValue = 0;
+
+        /// <summary>
+        /// if already focsed the Vector has no effect
+        /// <para>if it is not focuse, this is the position where the focus is set</para>
+        /// </summary>
+        /// <param name="FocusPosition"></param>
+        public void ToggleFocus(Vector3 FocusPosition)
+        {
+            Focused = !Focused;
+            CamaraLookAt = FocusPosition;
+        }
+
 
         public void Dispose()
         {
@@ -26,21 +40,22 @@ namespace Prototype
         {
             graphics = g;
             Mouse.SetPosition(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight / 2);
+            Focused = false;
         }
 
         public void Move(Vector3 moveVector)
         {
-            camTarget += moveVector;
-            camPosition += moveVector;
+            CamaraLookAt += moveVector;
+            CamaraPosition += moveVector;
         }
 
         public void Initialize()
         {
-            camTarget = new Vector3(0f, 0f, 0f);
-            camPosition = new Vector3(0f, 0f, -100f);
+            CamaraLookAt = new Vector3(0f, 0f, 0f);
+            CamaraPosition = new Vector3(0f, 0f, -100f);
             projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(90f), graphics.GraphicsDevice.DisplayMode.AspectRatio, 1f, 1000f);
-            viewMatrix = Matrix.CreateLookAt(camPosition, camTarget, new Vector3(0f, 1f, 0f)); // Y up
-            worldMatrix = Matrix.CreateWorld(camTarget, Vector3.Forward, Vector3.Up);
+            viewMatrix = Matrix.CreateLookAt(CamaraPosition, CamaraLookAt, new Vector3(0f, 1f, 0f)); // Y up
+            worldMatrix = Matrix.CreateWorld(CamaraLookAt, Vector3.Forward, Vector3.Up);
 
             graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
         }
@@ -49,31 +64,31 @@ namespace Prototype
         {
             if (state.IsKeyDown(Keys.Left))
             {
-                camPosition.X -= 1f;
-                camTarget.X -= 1f;
+                CamaraPosition.X -= 1f;
+                CamaraLookAt.X -= 1f;
             }
             if (state.IsKeyDown(Keys.Right))
             {
-                camPosition.X += 1f;
-                camTarget.X += 1f;
+                CamaraPosition.X += 1f;
+                CamaraLookAt.X += 1f;
             }
             if (state.IsKeyDown(Keys.Up))
             {
-                camPosition.Y -= 1f;
-                camTarget.Y -= 1f;
+                CamaraPosition.Y -= 1f;
+                CamaraLookAt.Y -= 1f;
             }
             if (state.IsKeyDown(Keys.Down))
             {
-                camPosition.Y += 1f;
-                camTarget.Y += 1f;
+                CamaraPosition.Y += 1f;
+                CamaraLookAt.Y += 1f;
             }
             if (state.IsKeyDown(Keys.OemPlus))
             {
-                camPosition.Z += 1f;
+                CamaraPosition.Z += 1f;
             }
             if (state.IsKeyDown(Keys.OemMinus))
             {
-                camPosition.Z -= 1f;
+                CamaraPosition.Z -= 1f;
             }
             if (state.IsKeyDown(Keys.Space) & !pState.IsKeyDown(Keys.Space))
             {
@@ -85,20 +100,49 @@ namespace Prototype
         {
             mState = Mouse.GetState();
 
-            camTarget.X -= camPosition.X;
-            camTarget.Y -= camPosition.Y;
-            camTarget.Z -= camPosition.Z;
+            if(mState.ScrollWheelValue != lastValue)
+            {
+                if ((CamaraLookAt - CamaraPosition).Length() > 100)
+                {
+                    CamaraPosition = CamaraLookAt + (100 / (CamaraLookAt - CamaraPosition).Length()) * (CamaraPosition - CamaraLookAt);
+                }
+                else if((CamaraLookAt - CamaraPosition).Length() < 50)
+                {
+                    CamaraPosition = CamaraLookAt + (50 / (CamaraLookAt - CamaraPosition).Length()) * (CamaraPosition - CamaraLookAt);
+                }
+                else
+                {
+                    CamaraPosition += ((mState.ScrollWheelValue - lastValue) / 100) * new Vector3(0, 0, 1);
 
-            Matrix rotateY = Matrix.CreateFromAxisAngle(new Vector3(0, 1, 0), MathHelper.ToRadians((pmState.X - mState.X)/2));
+                    System.Diagnostics.Debug.WriteLine("MouseWheelValue: " + mState.ScrollWheelValue);
+                }
+                lastValue = mState.ScrollWheelValue;
+            }
 
-            camTarget = Vector3.Transform(camTarget, rotateY);
-            camTarget += camPosition;
+            if (!Focused)
+            {
+                CamaraLookAt -= CamaraPosition;
+
+                Matrix rotateY = Matrix.CreateFromAxisAngle(new Vector3(0, 1, 0), MathHelper.ToRadians((pmState.X - mState.X) / 2));
+
+                CamaraLookAt = Vector3.Transform(CamaraLookAt, rotateY);
+                CamaraLookAt += CamaraPosition;
+            }
+            else
+            {
+                CamaraPosition -= CamaraLookAt;
+
+                Matrix rotateY = Matrix.CreateFromAxisAngle(new Vector3(0, 1, 0), MathHelper.ToRadians((pmState.X - mState.X) / 2));
+
+                CamaraPosition = Vector3.Transform(CamaraPosition, rotateY);
+                CamaraPosition += CamaraLookAt;
+            }
             
             System.Diagnostics.Debug.WriteLine("MousePos.X: " + mState.X);
             System.Diagnostics.Debug.WriteLine("MousePos.Y: " + mState.Y);
             System.Diagnostics.Debug.WriteLine("MouseWheel: " + mState.ScrollWheelValue);
 
-            Mouse.SetPosition(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight / 2);
+            //Mouse.SetPosition(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight / 2);
             pmState = Mouse.GetState();
         }
 
@@ -110,9 +154,9 @@ namespace Prototype
             if (orbit)
             {
                 Matrix rotationMatrix = Matrix.CreateRotationY(MathHelper.ToRadians(1f));
-                camPosition = Vector3.Transform(camPosition, rotationMatrix);
+                CamaraPosition = Vector3.Transform(CamaraPosition, rotationMatrix);
             }
-            viewMatrix = Matrix.CreateLookAt(camPosition, camTarget, Vector3.Up);
+            viewMatrix = Matrix.CreateLookAt(CamaraPosition, CamaraLookAt, Vector3.Up);
         }
 
         public void Draw(Model m)
