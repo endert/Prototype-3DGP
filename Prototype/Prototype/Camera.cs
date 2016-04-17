@@ -18,6 +18,9 @@ namespace Prototype
         MouseState pmState;
         public bool Focused { get; private set; }
         int lastValue = 0;
+        bool fixedMouse;
+
+        bool pressed = false;
 
         /// <summary>
         /// if already focsed the Vector has no effect
@@ -58,42 +61,6 @@ namespace Prototype
             worldMatrix = Matrix.CreateWorld(CamaraLookAt, Vector3.Forward, Vector3.Up);
 
             graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-        }
-
-        private void ControlKeyboard(KeyboardState state, KeyboardState pState)
-        {
-            if (state.IsKeyDown(Keys.Left))
-            {
-                CamaraPosition.X -= 1f;
-                CamaraLookAt.X -= 1f;
-            }
-            if (state.IsKeyDown(Keys.Right))
-            {
-                CamaraPosition.X += 1f;
-                CamaraLookAt.X += 1f;
-            }
-            if (state.IsKeyDown(Keys.Up))
-            {
-                CamaraPosition.Y -= 1f;
-                CamaraLookAt.Y -= 1f;
-            }
-            if (state.IsKeyDown(Keys.Down))
-            {
-                CamaraPosition.Y += 1f;
-                CamaraLookAt.Y += 1f;
-            }
-            if (state.IsKeyDown(Keys.OemPlus))
-            {
-                CamaraPosition.Z += 1f;
-            }
-            if (state.IsKeyDown(Keys.OemMinus))
-            {
-                CamaraPosition.Z -= 1f;
-            }
-            if (state.IsKeyDown(Keys.Space) & !pState.IsKeyDown(Keys.Space))
-            {
-                orbit = !orbit;
-            }
         }
 
         private void ControlMouse()
@@ -142,7 +109,17 @@ namespace Prototype
             System.Diagnostics.Debug.WriteLine("MousePos.Y: " + mState.Y);
             System.Diagnostics.Debug.WriteLine("MouseWheel: " + mState.ScrollWheelValue);
 
-            //Mouse.SetPosition(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight / 2);
+            if (Keyboard.GetState().IsKeyDown(Keys.X) && !pressed)
+            {
+                fixedMouse = !fixedMouse;
+                pressed = true;
+            }
+
+            if(!Keyboard.GetState().IsKeyDown(Keys.X) && pressed)
+                pressed = false;
+
+            if(fixedMouse)
+            Mouse.SetPosition(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight / 2);
             pmState = Mouse.GetState();
         }
 
