@@ -66,11 +66,6 @@ namespace Prototype.GameStates
 
         public EGameState Update(KeyboardState kState, KeyboardState previousState)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || kState.IsKeyDown(Keys.Escape))
-            {
-                return EGameState.None;
-            }
-
             if (kState.IsKeyDown(Keys.Enter) & !previousState.IsKeyDown(Keys.Enter))
                 keyboardControl = !keyboardControl;
 
