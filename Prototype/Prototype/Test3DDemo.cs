@@ -101,7 +101,6 @@ namespace Prototype
                     break;
             }
 
-
             previousGameState = currentGameState;
         }
 
