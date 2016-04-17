@@ -27,7 +27,7 @@ namespace Prototype
 
         Matrix GetWorldMatrix()
         {
-            const float circleRadius = 8;
+            const float circleRadius = 80;
             const float heightOffGround = 3;
 
             Matrix translationMatrix = Matrix.CreateTranslation(circleRadius, 0, heightOffGround);

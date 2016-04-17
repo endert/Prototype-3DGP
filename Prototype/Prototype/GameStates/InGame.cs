@@ -34,6 +34,14 @@ namespace Prototype.GameStates
             Width = size;
             Heigth = size;
 
+            floorVerts[0].TextureCoordinate = new Vector2(0, 0);
+            floorVerts[1].TextureCoordinate = new Vector2(0, 1);
+            floorVerts[2].TextureCoordinate = new Vector2(1, 0);
+
+            floorVerts[3].TextureCoordinate = floorVerts[1].TextureCoordinate;
+            floorVerts[4].TextureCoordinate = new Vector2(1, 1);
+            floorVerts[5].TextureCoordinate = floorVerts[2].TextureCoordinate;
+
             TextureData = new Color[Width * Heigth];
 
             float r;
@@ -42,9 +50,25 @@ namespace Prototype.GameStates
 
             for(int i = 0; i<Width*Heigth; ++i)
             {
-                
+                r = 0;
+                g = 0;
+                b = 0;
 
-                //TextureData[i] = new Color(r, g, b, 1);
+                if (i <= (Width * Heigth)/4)
+                    r = 1;
+                if (i > (Width * Heigth) / 4)
+                    g = 1;
+                if (i > (Width * Heigth) / 2)
+                {
+                    g = 0;
+                    b = 1;
+                }
+                if (i > 3 * (Width * Heigth) / 4)
+                {
+                    r = 1;
+                }
+
+                TextureData[i] = new Color(r, g, b, 1);
             }
         }
     }
@@ -97,7 +121,9 @@ namespace Prototype.GameStates
         {
             camera.ToggleFocus(posModel);
             horse = Content.Load<Model>("horse");
-        
+
+            planeTexture = new Texture2D(gDevice, (int)plane.Width, (int)plane.Heigth);
+            planeTexture.SetData<Color>(plane.TextureData);
         }
 
         public void UnLoadContent()
@@ -120,6 +146,8 @@ namespace Prototype.GameStates
 
             effect.Projection = Matrix.CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearClipPlane, farClipPlane);
 
+            effect.TextureEnabled = true;
+            effect.Texture = planeTexture;
 
             foreach (var pass in effect.CurrentTechnique.Passes)
             {
