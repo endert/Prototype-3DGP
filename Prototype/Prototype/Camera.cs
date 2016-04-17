@@ -70,7 +70,7 @@ namespace Prototype
 
             if (mState.ScrollWheelValue != lastValue)
             {
-                CamaraPosition += ((mState.ScrollWheelValue - lastValue) / 10) * new Vector3(0, 0, 1);
+                CamaraPosition += ((mState.ScrollWheelValue - lastValue) / (10*(CamaraLookAt - CamaraPosition).Length())) * (CamaraLookAt- CamaraPosition);
 
                 //System.Diagnostics.Debug.WriteLine("MouseWheelValue: " + mState.ScrollWheelValue);
 
@@ -144,6 +144,7 @@ namespace Prototype
             {
                 foreach (BasicEffect effect in mesh.Effects)
                 {
+                    effect.EnableDefaultLighting();
                     effect.AmbientLightColor = new Vector3(1f, 0, 0);
                     effect.View = viewMatrix;
                     effect.World = worldMatrix;

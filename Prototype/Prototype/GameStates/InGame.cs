@@ -14,9 +14,15 @@ namespace Prototype.GameStates
     {
         public VertexPositionTexture[] floorVerts;
 
+        public uint Width;
+        public uint Heigth;
+
+        public Color[] TextureData;
+
         public Plane(uint size)
         {
             floorVerts = new VertexPositionTexture[6];
+
             floorVerts[0].Position = new Vector3(size, 0, -size);
             floorVerts[1].Position = new Vector3(-size, 0, size);
             floorVerts[2].Position = new Vector3(-size, 0, -size);
@@ -24,6 +30,22 @@ namespace Prototype.GameStates
             floorVerts[3].Position = floorVerts[0].Position;
             floorVerts[4].Position = new Vector3(size, 0, size);
             floorVerts[5].Position = floorVerts[1].Position;
+
+            Width = size;
+            Heigth = size;
+
+            TextureData = new Color[Width * Heigth];
+
+            float r;
+            float g;
+            float b;
+
+            for(int i = 0; i<Width*Heigth; ++i)
+            {
+                
+
+                //TextureData[i] = new Color(r, g, b, 1);
+            }
         }
     }
 
@@ -40,7 +62,8 @@ namespace Prototype.GameStates
         bool pressed;
 
         Plane plane;
-        
+        Texture2D planeTexture;
+
         BasicEffect effect;
 
         public InGame(GraphicsDeviceManager g, GraphicsDevice gD, ContentManager content)
@@ -50,8 +73,8 @@ namespace Prototype.GameStates
             Content = content;
             camera = new Camera(graphics);
 
-            LoadContent();
-            Initialize();
+            //LoadContent();
+            //Initialize();
 
             plane = new Plane(500);
         }
@@ -67,7 +90,10 @@ namespace Prototype.GameStates
         public void LoadContent()
         {
             model = Content.Load<Model>("Dragon 2.5_fbx");
-           
+            camera.ToggleFocus(posModel);
+
+
+
         }
 
         public void UnLoadContent()
@@ -90,6 +116,8 @@ namespace Prototype.GameStates
             float farClipPlane = 200;
 
             effect.Projection = Matrix.CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearClipPlane, farClipPlane);
+
+
 
             foreach (var pass in effect.CurrentTechnique.Passes)
             {
