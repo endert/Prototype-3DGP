@@ -10,6 +10,11 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Prototype.GameStates
 {
+    class GameObject
+    {
+        public Vector3 Position { get; protected set; }
+    }
+
     class Plane
     {
         public VertexPositionTexture[] floorVerts;
@@ -81,8 +86,8 @@ namespace Prototype.GameStates
         float angle = 0;
         Camera camera;
         Dragon dragon;
-        Model horse;
-        Vector3 posModel;
+        Horse horse;
+        Vector3 moveVector;
         bool pressed;
         float aspectRatio;
 
@@ -106,7 +111,7 @@ namespace Prototype.GameStates
 
         public void Initialize()
         {
-            posModel = new Vector3(0, 0, 0);
+            moveVector = new Vector3(0, 0, 0);
             
             effect = new BasicEffect(gDevice);
             camera.Initialize();
@@ -114,14 +119,16 @@ namespace Prototype.GameStates
             dragon = new Dragon();
             dragon.Initialize(Content);
 
+            horse = new Horse();
+            horse.Initialize(Content);
+
+            camera.SetFocus(horse);
+
             aspectRatio = gDevice.DisplayMode.AspectRatio;
         }
 
         public void LoadContent()
         {
-            camera.ToggleFocus(posModel);
-            horse = Content.Load<Model>("horse");
-
             planeTexture = new Texture2D(gDevice, (int)plane.Width, (int)plane.Heigth);
             planeTexture.SetData<Color>(plane.TextureData);
         }
@@ -142,7 +149,7 @@ namespace Prototype.GameStates
 
             float fieldOfView = MathHelper.ToRadians(90f);
             float nearClipPlane = 1;
-            float farClipPlane = 200;
+            float farClipPlane = 2000;
 
             effect.Projection = Matrix.CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearClipPlane, farClipPlane);
 
@@ -158,31 +165,41 @@ namespace Prototype.GameStates
         }
         private void UpdateKeyboard(KeyboardState state)
         {
-            if (state.IsKeyDown(Keys.D))
-                angle += 0.1f;
-            if (state.IsKeyDown(Keys.A))
-                angle -= 0.1f;
+            moveVector = Vector3.Zero;
+
+            Vector2 front = new Vector2(camera.Front.X, camera.Front.Z);
+            front.Normalize();
+
             if (state.IsKeyDown(Keys.W))
             {
-                posModel.Z -= 1;
-                camera.Move(new Vector3(0, 0, -1));
+                moveVector.Z += front.Y;
+                moveVector.X += front.X;
             }
             if (state.IsKeyDown(Keys.S))
             {
-                posModel.Z += 1;
-                camera.Move(new Vector3(0, 0, 1));
+                moveVector.Z -= front.Y;
+                moveVector.X -= front.X;
             }
+
+            //if(state.IsKeyDown(Keys.A))
+            //{
+            //    moveVector.X += 1;
+            //}
+            //if (state.IsKeyDown(Keys.D))
+            //    moveVector.X -= 1;
 
             if (state.IsKeyDown(Keys.F)&& !pressed)
             {
                 pressed = true;
-                camera.ToggleFocus(posModel);
+                camera.ToggleFocus();
             }
 
             if (pressed && !state.IsKeyDown(Keys.F))
                 pressed = false;
 
-            camera.worldMatrix = Matrix.CreateRotationY(angle) * Matrix.CreateTranslation(posModel);
+            camera.Move(moveVector);
+            horse.Move(moveVector);
+            horse.Rotate(camera.Front);
         }
 
         public EGameState Update(KeyboardState kState, KeyboardState previousState, GameTime gameTime)
@@ -195,9 +212,8 @@ namespace Prototype.GameStates
             previousState = kState;
 
             System.Diagnostics.Debug.WriteLine("Clear");
-            BoundingSphere horseBounding = new BoundingSphere(horse.Meshes[0].BoundingSphere.Center, horse.Meshes[0].BoundingSphere.Radius * 0.01f);
-            if (horseBounding.Intersects(dragon.Boundingsphere))
-                System.Diagnostics.Debug.WriteLine("Collision");
+            if (dragon.Boundingsphere.Intersects(horse.Boundingsphere))
+                System.Diagnostics.Debug.WriteLine("COLLISION");
 
             return EGameState.InGame;
         }
@@ -205,7 +221,7 @@ namespace Prototype.GameStates
         public void Draw()
         {
             dragon.Draw(camera.CamaraPosition, aspectRatio, camera);
-            camera.Draw(horse);
+            horse.Draw(camera.CamaraPosition, aspectRatio, camera);
             DrawGround();
         }
 

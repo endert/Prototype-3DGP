@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Prototype.GameStates;
 using System;
 
 namespace Prototype
@@ -20,6 +21,12 @@ namespace Prototype
         int lastValue = 0;
         bool fixedMouse;
 
+        GameObject FocusedObj;
+
+        public float Rotation { get; private set; }
+
+        public Vector3 Front { get { return CamaraLookAt - CamaraPosition; } }
+
         bool pressed = false;
 
         /// <summary>
@@ -27,12 +34,15 @@ namespace Prototype
         /// <para>if it is not focuse, this is the position where the focus is set</para>
         /// </summary>
         /// <param name="FocusPosition"></param>
-        public void ToggleFocus(Vector3 FocusPosition)
+        public void ToggleFocus()
         {
             Focused = !Focused;
-            CamaraLookAt = FocusPosition;
         }
 
+        public void SetFocus(GameObject gObj)
+        {
+            FocusedObj = gObj;
+        }
 
         public void Dispose()
         {
@@ -81,6 +91,8 @@ namespace Prototype
             {
                 CamaraLookAt -= CamaraPosition;
 
+                Rotation += MathHelper.ToRadians((pmState.X - mState.X)/2);
+
                 Matrix rotateY = Matrix.CreateFromAxisAngle(new Vector3(0, 1, 0), MathHelper.ToRadians((pmState.X - mState.X) / 2));
 
                 CamaraLookAt = Vector3.Transform(CamaraLookAt, rotateY);
@@ -90,6 +102,7 @@ namespace Prototype
             {
                 CamaraPosition -= CamaraLookAt;
 
+                Rotation += MathHelper.ToRadians((pmState.X - mState.X) / 2);
                 Matrix rotateY = Matrix.CreateFromAxisAngle(new Vector3(0, 1, 0), MathHelper.ToRadians((pmState.X - mState.X) / 2));
 
                 CamaraPosition = Vector3.Transform(CamaraPosition, rotateY);
@@ -127,7 +140,8 @@ namespace Prototype
 
         public void Update(KeyboardState state, KeyboardState pState)
         {
-            
+            if (FocusedObj != null && Focused)
+                CamaraLookAt = FocusedObj.Position;
             ControlMouse();
 
             if (orbit)

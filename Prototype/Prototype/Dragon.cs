@@ -7,14 +7,23 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Prototype.GameStates;
 
 namespace Prototype
 {
-    class Dragon
+    class Dragon : GameObject
     {
         Model model;
         float angle;
-        public BoundingSphere Boundingsphere { get { return model.Meshes[0].BoundingSphere; } }
+        public BoundingSphere Boundingsphere
+        {
+            get
+            {
+                var sphere = model.Meshes[0].BoundingSphere;
+                sphere.Center += Position;
+                return sphere;
+            }
+        }
 
         public void Initialize(ContentManager contentManager)
         {
@@ -30,11 +39,14 @@ namespace Prototype
         {
             const float circleRadius = 80;
             const float heightOffGround = 3;
+            Position = new Vector3(circleRadius, 0, heightOffGround);
 
             Matrix translationMatrix = Matrix.CreateTranslation(circleRadius, 0, heightOffGround);
 
             Matrix rotationMatrix = Matrix.CreateRotationY(angle);
             Matrix combined = translationMatrix * rotationMatrix;
+
+            Position = Vector3.Transform(Position, rotationMatrix);
 
             return combined;
         }
@@ -56,7 +68,7 @@ namespace Prototype
 
                     float fieldOfView = MathHelper.ToRadians(90f);
                     float nearClipPlane = 1;
-                    float farClipPlane = 200;
+                    float farClipPlane = 2000;
 
                     effect.Projection = Matrix.CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearClipPlane, farClipPlane);
                 }
