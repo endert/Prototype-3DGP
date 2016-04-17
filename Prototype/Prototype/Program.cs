@@ -15,7 +15,7 @@ namespace Prototype
         static void Main()
         {
             using (var game = new Test3DDemo())
-                game.Run();
+                game.Run();     
         }
     }
 #endif
