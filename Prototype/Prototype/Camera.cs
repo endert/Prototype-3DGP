@@ -98,7 +98,7 @@ namespace Prototype
 
         public void Update(KeyboardState state, KeyboardState pState)
         {
-            //ControlKeyboard(state, pState);
+            
             ControlMouse();
 
             if (orbit)

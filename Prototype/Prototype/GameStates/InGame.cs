@@ -65,11 +65,7 @@ namespace Prototype.GameStates
 
         public EGameState Update(KeyboardState kState, KeyboardState previousState)
         {
-            if (kState.IsKeyDown(Keys.Enter) & !previousState.IsKeyDown(Keys.Enter))
-                keyboardControl = !keyboardControl;
-
-            if (keyboardControl) UpdateKeyboard(kState);
-            //else UpdateMouse();
+            UpdateKeyboard(kState);
 
             camera.Update(kState, previousState);
 
