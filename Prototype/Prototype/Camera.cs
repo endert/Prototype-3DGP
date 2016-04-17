@@ -64,27 +64,16 @@ namespace Prototype
         }
 
         private void ControlMouse()
-        {
-            CamaraPosition = new Vector3(CamaraPosition.X, 20, CamaraPosition.Z);
+        { 
 
             mState = Mouse.GetState();
 
-            if(mState.ScrollWheelValue != lastValue)
+            if (mState.ScrollWheelValue != lastValue)
             {
-                if ((CamaraLookAt - CamaraPosition).Length() > 100)
-                {
-                    CamaraPosition = CamaraLookAt + (100 / (CamaraLookAt - CamaraPosition).Length()) * (CamaraPosition - CamaraLookAt);
-                }
-                else if((CamaraLookAt - CamaraPosition).Length() < 50)
-                {
-                    CamaraPosition = CamaraLookAt + (50 / (CamaraLookAt - CamaraPosition).Length()) * (CamaraPosition - CamaraLookAt);
-                }
-                else
-                {
-                    CamaraPosition += ((mState.ScrollWheelValue - lastValue) / 100) * new Vector3(0, 0, 1);
+                CamaraPosition += ((mState.ScrollWheelValue - lastValue) / 10) * new Vector3(0, 0, 1);
 
-                    System.Diagnostics.Debug.WriteLine("MouseWheelValue: " + mState.ScrollWheelValue);
-                }
+                //System.Diagnostics.Debug.WriteLine("MouseWheelValue: " + mState.ScrollWheelValue);
+
                 lastValue = mState.ScrollWheelValue;
             }
 
@@ -106,7 +95,18 @@ namespace Prototype
                 CamaraPosition = Vector3.Transform(CamaraPosition, rotateY);
                 CamaraPosition += CamaraLookAt;
             }
-            
+
+            CamaraPosition += (mState.Y - pmState.Y) * new Vector3(0, 1, 0);
+
+            if ((CamaraLookAt - CamaraPosition).Length() > 100)
+            {
+                CamaraPosition = CamaraLookAt + (100 / (CamaraLookAt - CamaraPosition).Length()) * (CamaraPosition - CamaraLookAt);
+            }
+            else if ((CamaraLookAt - CamaraPosition).Length() < 50)
+            {
+                CamaraPosition = CamaraLookAt + (50 / (CamaraLookAt - CamaraPosition).Length()) * (CamaraPosition - CamaraLookAt);
+            }
+
             System.Diagnostics.Debug.WriteLine("MousePos.X: " + mState.X);
             System.Diagnostics.Debug.WriteLine("MousePos.Y: " + mState.Y);
             System.Diagnostics.Debug.WriteLine("MouseWheel: " + mState.ScrollWheelValue);
