@@ -120,6 +120,7 @@ namespace Prototype
                     effect.World = worldMatrix;
                     effect.Projection = projectionMatrix;
                 }
+                
                 mesh.Draw();
             }
         }
