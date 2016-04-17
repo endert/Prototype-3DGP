@@ -52,12 +52,12 @@ namespace Prototype.GameStates
     class InGame : IGameState
     {
         GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
         GraphicsDevice gDevice;
         ContentManager Content;
         float angle = 0;
         Camera camera;
-        Model model;
+        Model dragon;
+        Model horse;
         Vector3 posModel;
         bool pressed;
 
@@ -89,11 +89,10 @@ namespace Prototype.GameStates
 
         public void LoadContent()
         {
-            model = Content.Load<Model>("Dragon 2.5_fbx");
+            dragon = Content.Load<Model>("Dragon 2.5_fbx");
             camera.ToggleFocus(posModel);
-
-
-
+            horse = Content.Load<Model>("horse");
+        
         }
 
         public void UnLoadContent()
@@ -168,18 +167,19 @@ namespace Prototype.GameStates
 
         public void Draw()
         { 
-            camera.Draw(model);
+            camera.Draw(dragon);
+            camera.Draw(horse);
             DrawGround();
         }
 
         public void Dispose()
         {
             graphics = null;
-            spriteBatch = null;
             gDevice = null;
             Content = null;
             camera.Dispose();
-            model = null;
+            dragon = null;
+            horse = null;
         }
     }
 }
