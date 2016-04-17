@@ -41,7 +41,7 @@ namespace Prototype
         protected override void Initialize()
         {
             base.Initialize();
-            IsMouseVisible = true;
+            IsMouseVisible = false;
 
             position = new Vector2(graphics.GraphicsDevice.Viewport.Width / 2, graphics.GraphicsDevice.Viewport.Height / 2);
             posModel = new Vector3(0, 0, 0);
@@ -127,7 +127,10 @@ namespace Prototype
             kState = Keyboard.GetState();
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || kState.IsKeyDown(Keys.Escape))
+            {
                 Exit();
+                return;
+            }
 
             if (kState.IsKeyDown(Keys.Enter) & !previousState.IsKeyDown(Keys.Enter))
                 keyboardControl = !keyboardControl;
