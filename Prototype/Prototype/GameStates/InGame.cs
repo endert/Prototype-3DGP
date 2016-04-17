@@ -67,9 +67,9 @@ namespace Prototype.GameStates
 
         public void DrawGround()
         {
-            var cameraPosition = new Vector3(0, 20, 20);
-            var cameraLookAtVector = Vector3.Zero;
-            var cameraUpVector = Vector3.UnitZ;
+            var cameraPosition = camera.CamaraPosition;
+            var cameraLookAtVector = camera.CamaraLookAt;
+            var cameraUpVector = Vector3.UnitY;
 
             effect.View = Matrix.CreateLookAt(cameraPosition, cameraLookAtVector, cameraUpVector);
 

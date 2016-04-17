@@ -60,42 +60,6 @@ namespace Prototype
             graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
         }
 
-        private void ControlKeyboard(KeyboardState state, KeyboardState pState)
-        {
-            if (state.IsKeyDown(Keys.Left))
-            {
-                CamaraPosition.X -= 1f;
-                CamaraLookAt.X -= 1f;
-            }
-            if (state.IsKeyDown(Keys.Right))
-            {
-                CamaraPosition.X += 1f;
-                CamaraLookAt.X += 1f;
-            }
-            if (state.IsKeyDown(Keys.Up))
-            {
-                CamaraPosition.Y -= 1f;
-                CamaraLookAt.Y -= 1f;
-            }
-            if (state.IsKeyDown(Keys.Down))
-            {
-                CamaraPosition.Y += 1f;
-                CamaraLookAt.Y += 1f;
-            }
-            if (state.IsKeyDown(Keys.OemPlus))
-            {
-                CamaraPosition.Z += 1f;
-            }
-            if (state.IsKeyDown(Keys.OemMinus))
-            {
-                CamaraPosition.Z -= 1f;
-            }
-            if (state.IsKeyDown(Keys.Space) & !pState.IsKeyDown(Keys.Space))
-            {
-                orbit = !orbit;
-            }
-        }
-
         private void ControlMouse()
         {
             mState = Mouse.GetState();
