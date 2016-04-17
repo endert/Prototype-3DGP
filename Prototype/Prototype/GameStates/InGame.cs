@@ -41,9 +41,9 @@ namespace Prototype.GameStates
             posModel = new Vector3(0, 0, 0);
 
             floorVerts = new VertexPositionTexture[6];
-            floorVerts[0].Position = new Vector3(-20, 0, -20);
+            floorVerts[0].Position = new Vector3(20, 0, -20);
             floorVerts[1].Position = new Vector3(-20, 0, 20);
-            floorVerts[2].Position = new Vector3(20, 0, -20);
+            floorVerts[2].Position = new Vector3(-20, 0, -20);
 
             floorVerts[3].Position = floorVerts[1].Position;
             floorVerts[4].Position = new Vector3(20, 0, 20);
