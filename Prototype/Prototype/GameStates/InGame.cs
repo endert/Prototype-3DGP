@@ -67,7 +67,6 @@ namespace Prototype.GameStates
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || kState.IsKeyDown(Keys.Escape))
             {
-                UnLoadContent();
                 return EGameState.None;
             }
 
@@ -81,7 +80,6 @@ namespace Prototype.GameStates
 
             previousState = kState;
 
-            UnLoadContent();
             return EGameState.InGame;
         }
 

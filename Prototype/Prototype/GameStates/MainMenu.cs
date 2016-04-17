@@ -51,7 +51,7 @@ namespace Prototype.GameStates
 
         public void UnLoadContent()
         {
-            Content.Unload();
+            //Content.Unload();
         }
 
         public EGameState Update(KeyboardState kState, KeyboardState pk)

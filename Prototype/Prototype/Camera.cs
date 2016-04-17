@@ -19,6 +19,7 @@ namespace Prototype
         public Camera(GraphicsDeviceManager g)
         {
             graphics = g;
+            Mouse.SetPosition(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight / 2);
         }
 
         public void Move(Vector3 moveVector)
@@ -36,8 +37,6 @@ namespace Prototype
             worldMatrix = Matrix.CreateWorld(camTarget, Vector3.Forward, Vector3.Up);
 
             graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-
-            Mouse.SetPosition(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight / 2);
         }
 
         private void ControlKeyboard(KeyboardState state, KeyboardState pState)
