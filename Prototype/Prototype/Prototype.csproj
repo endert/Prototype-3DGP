@@ -39,6 +39,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Camera.cs" />
+    <Compile Include="GameStates\Credits.cs" />
+    <Compile Include="GameStates\GameState.cs" />
+    <Compile Include="GameStates\InGame.cs" />
+    <Compile Include="GameStates\MainMenu.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Test3DDemo.cs" />
