@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework.Input;
 
 namespace Prototype.GameStates
 {
@@ -20,7 +21,7 @@ namespace Prototype.GameStates
 
     interface IGameState
     {
-        EGameState Update();
+        EGameState Update(KeyboardState k, KeyboardState pk);
         void Draw();
         void UnLoadContent();
     }

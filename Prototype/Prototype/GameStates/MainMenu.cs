@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,8 @@ namespace Prototype.GameStates
         SpriteBatch spriteBatch;
         GraphicsDevice gDevice;
         ContentManager Content;
+        Texture2D pressEnter;
+       
 
         public MainMenu(GraphicsDeviceManager g, GraphicsDevice gD, ContentManager content)
         {
@@ -28,7 +31,11 @@ namespace Prototype.GameStates
 
         public void Draw()
         {
-            
+            graphics.GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            spriteBatch.Begin();
+            spriteBatch.Draw(pressEnter, new Vector2(graphics.PreferredBackBufferHeight / 2, graphics.PreferredBackBufferWidth / 2), origin: new Vector2(pressEnter.Width / 2, pressEnter.Height / 2));
+            spriteBatch.End();
         }
 
         private void Initialize()
@@ -38,18 +45,21 @@ namespace Prototype.GameStates
 
         private void LoadContent()
         {
-            
+            spriteBatch = new SpriteBatch(graphics.GraphicsDevice);
+            pressEnter = Content.Load<Texture2D>("pressEnter");
         }
 
         public void UnLoadContent()
         {
-
+            Content.Unload();
         }
 
-        public EGameState Update()
+        public EGameState Update(KeyboardState kState, KeyboardState pk)
         {
-
-            return EGameState.MainMenu;
+            if (kState.IsKeyDown(Keys.Enter))
+                return EGameState.InGame;
+            else
+                return EGameState.MainMenu;
         }
     }
 }
