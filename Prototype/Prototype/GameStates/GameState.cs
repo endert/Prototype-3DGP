@@ -23,6 +23,9 @@ namespace Prototype.GameStates
     {
         EGameState Update(KeyboardState k, KeyboardState pk);
         void Draw();
+        void Initialize();
+        void LoadContent();
+
         void UnLoadContent();
     }
 }

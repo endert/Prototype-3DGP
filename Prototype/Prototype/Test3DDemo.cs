@@ -12,8 +12,6 @@ namespace Prototype
         GraphicsDeviceManager graphics;
         KeyboardState kState;
         KeyboardState previousState;
-        InGame inGame;
-        MainMenu mainMenu;
      
         EGameState currentGameState;
         EGameState previousGameState = EGameState.None;
@@ -26,7 +24,7 @@ namespace Prototype
             Content.RootDirectory = "Content";
             graphics.IsFullScreen = false;
             currentGameState = EGameState.MainMenu;
-
+            gameState = new MainMenu(graphics, graphics.GraphicsDevice, Content);
             //LoadContent();
             //Initialize();         
         }
@@ -38,15 +36,17 @@ namespace Prototype
 
             previousState = Keyboard.GetState();
 
-            
+            gameState.Initialize();
 
-            mainMenu = new MainMenu(graphics, graphics.GraphicsDevice, Content);
+            
             //inGame = new InGame(graphics, graphics.GraphicsDevice, Content);
         }
 
         protected override void LoadContent()
         {
-            
+            base.LoadContent();
+
+            gameState.LoadContent();
         }
 
         protected override void UnloadContent()
@@ -57,7 +57,12 @@ namespace Prototype
         protected override void Update(GameTime gameTime)
         {
             kState = Keyboard.GetState();
-            gameState.Update(kState, previousState);
+            currentGameState = gameState.Update(kState, previousState);
+            if(currentGameState != previousGameState)
+            {
+
+            }
+
             base.Update(gameTime);
         }
 
@@ -68,5 +73,6 @@ namespace Prototype
 
             base.Draw(gameTime);
         }
+
     }
 }

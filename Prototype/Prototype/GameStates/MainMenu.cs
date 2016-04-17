@@ -25,8 +25,8 @@ namespace Prototype.GameStates
             gDevice = gD;
             Content = content;
 
-            LoadContent();
-            Initialize();
+            //LoadContent();
+            //Initialize();
         }
 
         public void Draw()
@@ -38,12 +38,12 @@ namespace Prototype.GameStates
             spriteBatch.End();
         }
 
-        private void Initialize()
+        public void Initialize()
         {
             
         }
 
-        private void LoadContent()
+        public void LoadContent()
         {
             spriteBatch = new SpriteBatch(graphics.GraphicsDevice);
             pressEnter = Content.Load<Texture2D>("pressEnter");
