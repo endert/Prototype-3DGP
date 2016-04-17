@@ -1,10 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace Prototype
 {
-    class Camera
+    class Camera : IDisposable
     {
         GraphicsDeviceManager graphics;
         Vector3 camTarget;
@@ -15,6 +16,11 @@ namespace Prototype
         bool orbit = false;
         MouseState mState;
         MouseState pmState;
+
+        public void Dispose()
+        {
+            graphics = null;
+        }
 
         public Camera(GraphicsDeviceManager g)
         {

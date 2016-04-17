@@ -84,6 +84,13 @@ namespace Prototype
         {
             switch (currentGameState)
             {
+                case EGameState.MainMenu:
+                    gameState.UnLoadContent();
+                    gameState = new InGame(graphics, GraphicsDevice, Content);
+                    gameState.LoadContent();
+                    gameState.Initialize();
+                    break;
+
                 case EGameState.InGame:
                     gameState.UnLoadContent();
                     gameState = new InGame(graphics, GraphicsDevice, Content);

@@ -47,6 +47,7 @@ namespace Prototype.GameStates
         public void UnLoadContent()
         {
             Content.Unload();
+            Dispose();
         }
 
         private void UpdateKeyboard(KeyboardState state)
@@ -86,6 +87,16 @@ namespace Prototype.GameStates
         public void Draw()
         {
             camera.Draw(model);
+        }
+
+        public void Dispose()
+        {
+            graphics = null;
+            spriteBatch = null;
+            gDevice = null;
+            Content = null;
+            camera.Dispose();
+            model = null;
         }
     }
 }
