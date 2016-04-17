@@ -19,7 +19,7 @@ namespace Prototype.GameStates
         Count
     }
 
-    interface IGameState
+    interface IGameState : IDisposable
     {
         EGameState Update(KeyboardState k, KeyboardState pk);
         void Draw();

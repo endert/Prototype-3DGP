@@ -16,7 +16,6 @@ namespace Prototype.GameStates
         SpriteBatch spriteBatch;
         GraphicsDevice gDevice;
         ContentManager Content;
-        bool keyboardControl = true;
         float angle = 0;
         Camera camera;
         Model model;
@@ -47,6 +46,7 @@ namespace Prototype.GameStates
         public void UnLoadContent()
         {
             Content.Unload();
+            Dispose();
         }
 
         private void UpdateKeyboard(KeyboardState state)
@@ -77,6 +77,16 @@ namespace Prototype.GameStates
         public void Draw()
         {
             camera.Draw(model);
+        }
+
+        public void Dispose()
+        {
+            graphics = null;
+            spriteBatch = null;
+            gDevice = null;
+            Content = null;
+            camera.Dispose();
+            model = null;
         }
     }
 }

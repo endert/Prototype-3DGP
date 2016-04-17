@@ -52,6 +52,7 @@ namespace Prototype.GameStates
         public void UnLoadContent()
         {
             Content.Unload();
+            Dispose();
         }
 
         public EGameState Update(KeyboardState kState, KeyboardState pk)
@@ -60,6 +61,15 @@ namespace Prototype.GameStates
                 return EGameState.InGame;
             else
                 return EGameState.MainMenu;
+        }
+
+        public void Dispose()
+        {
+            graphics = null;
+            spriteBatch = null;
+            gDevice = null;
+            Content = null;
+            pressEnter = null;
         }
     }
 }

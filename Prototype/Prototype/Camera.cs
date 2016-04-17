@@ -1,10 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace Prototype
 {
-    class Camera
+    class Camera : IDisposable
     {
         GraphicsDeviceManager graphics;
         Vector3 camTarget;
@@ -16,9 +17,15 @@ namespace Prototype
         MouseState mState;
         MouseState pmState;
 
+        public void Dispose()
+        {
+            graphics = null;
+        }
+
         public Camera(GraphicsDeviceManager g)
         {
             graphics = g;
+            Mouse.SetPosition(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight / 2);
         }
 
         public void Move(Vector3 moveVector)
@@ -36,8 +43,6 @@ namespace Prototype
             worldMatrix = Matrix.CreateWorld(camTarget, Vector3.Forward, Vector3.Up);
 
             graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-
-            Mouse.SetPosition(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight / 2);
         }
 
         private void ControlKeyboard(KeyboardState state, KeyboardState pState)
