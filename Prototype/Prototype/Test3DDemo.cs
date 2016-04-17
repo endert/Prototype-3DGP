@@ -34,7 +34,7 @@ namespace Prototype
         protected override void Initialize()
         {
             base.Initialize();
-            IsMouseVisible = true;
+            IsMouseVisible = false;
 
             previousState = Keyboard.GetState();
 

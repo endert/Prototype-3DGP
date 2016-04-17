@@ -14,10 +14,17 @@ namespace Prototype
         public Matrix worldMatrix;
         bool orbit = false;
         MouseState mState;
+        MouseState pmState;
 
         public Camera(GraphicsDeviceManager g)
         {
             graphics = g;
+        }
+
+        public void Move(Vector3 moveVector)
+        {
+            camTarget += moveVector;
+            camPosition += moveVector;
         }
 
         public void Initialize()
@@ -27,6 +34,9 @@ namespace Prototype
             projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(90f), graphics.GraphicsDevice.DisplayMode.AspectRatio, 1f, 1000f);
             viewMatrix = Matrix.CreateLookAt(camPosition, camTarget, new Vector3(0f, 1f, 0f)); // Y up
             worldMatrix = Matrix.CreateWorld(camTarget, Vector3.Forward, Vector3.Up);
+
+            Mouse.SetPosition(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight / 2);
+            
         }
 
         private void ControlKeyboard(KeyboardState state, KeyboardState pState)
@@ -69,11 +79,20 @@ namespace Prototype
         {
             mState = Mouse.GetState();
 
-            camTarget.X = mState.X;
-            camTarget.Y = mState.Y;
+            camTarget.X -= camPosition.X;
+            camTarget.Y -= camPosition.Y;
+            camTarget.Z -= camPosition.Z;
+
+            Matrix rotateY = Matrix.CreateFromAxisAngle(new Vector3(0, 1, 0), MathHelper.ToRadians((pmState.X - mState.X)/2));
+
+            camTarget = Vector3.Transform(camTarget, rotateY);
+            camTarget += camPosition;
             
             System.Diagnostics.Debug.WriteLine("MousePos.X: " + mState.X);
             System.Diagnostics.Debug.WriteLine("MousePos.Y: " + mState.Y);
+
+            Mouse.SetPosition(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight / 2);
+            pmState = Mouse.GetState();
         }
 
         public void Update(KeyboardState state, KeyboardState pState)
