@@ -10,6 +10,23 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Prototype.GameStates
 {
+    class Plane
+    {
+        public VertexPositionTexture[] floorVerts;
+
+        public Plane(uint size)
+        {
+            floorVerts = new VertexPositionTexture[6];
+            floorVerts[0].Position = new Vector3(size, 0, -size);
+            floorVerts[1].Position = new Vector3(-size, 0, size);
+            floorVerts[2].Position = new Vector3(-size, 0, -size);
+
+            floorVerts[3].Position = floorVerts[0].Position;
+            floorVerts[4].Position = new Vector3(size, 0, size);
+            floorVerts[5].Position = floorVerts[1].Position;
+        }
+    }
+
     class InGame : IGameState
     {
         GraphicsDeviceManager graphics;
@@ -22,7 +39,8 @@ namespace Prototype.GameStates
         Vector3 posModel;
         bool pressed;
 
-        VertexPositionTexture[] floorVerts;
+        Plane plane;
+        
         BasicEffect effect;
 
         public InGame(GraphicsDeviceManager g, GraphicsDevice gD, ContentManager content)
@@ -34,21 +52,14 @@ namespace Prototype.GameStates
 
             LoadContent();
             Initialize();
+
+            plane = new Plane(500);
         }
 
         public void Initialize()
         {
             posModel = new Vector3(0, 0, 0);
-
-            floorVerts = new VertexPositionTexture[6];
-            floorVerts[0].Position = new Vector3(-20, 0, -20);
-            floorVerts[1].Position = new Vector3(-20, 0, 20);
-            floorVerts[2].Position = new Vector3(20, 0, -20);
-
-            floorVerts[3].Position = floorVerts[1].Position;
-            floorVerts[4].Position = new Vector3(20, 0, 20);
-            floorVerts[5].Position = floorVerts[2].Position;
-
+            
             effect = new BasicEffect(gDevice);
             camera.Initialize();
         }
@@ -84,8 +95,7 @@ namespace Prototype.GameStates
             {
                 pass.Apply();
 
-                gDevice.DrawUserPrimitives(PrimitiveType.TriangleList, floorVerts, 0, 2);
-
+                gDevice.DrawUserPrimitives(PrimitiveType.TriangleList, plane.floorVerts, 0, 2);
             }
         }
         private void UpdateKeyboard(KeyboardState state)
@@ -95,9 +105,15 @@ namespace Prototype.GameStates
             if (state.IsKeyDown(Keys.A))
                 angle -= 0.1f;
             if (state.IsKeyDown(Keys.W))
+            {
                 posModel.Z -= 1;
+                camera.Move(new Vector3(0, 0, -1));
+            }
             if (state.IsKeyDown(Keys.S))
+            {
                 posModel.Z += 1;
+                camera.Move(new Vector3(0, 0, 1));
+            }
 
             if (state.IsKeyDown(Keys.F)&& !pressed)
             {
