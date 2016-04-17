@@ -23,10 +23,7 @@ namespace Prototype
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             graphics.IsFullScreen = false;
-            currentGameState = EGameState.MainMenu;
-            gameState = new MainMenu(graphics, graphics.GraphicsDevice, Content);
-            //LoadContent();
-            //Initialize();         
+            currentGameState = EGameState.MainMenu;      
         }
 
         protected override void Initialize()
@@ -35,18 +32,11 @@ namespace Prototype
             IsMouseVisible = false;
 
             previousState = Keyboard.GetState();
-
-            gameState.Initialize();
-
-            
-            //inGame = new InGame(graphics, graphics.GraphicsDevice, Content);
         }
 
         protected override void LoadContent()
         {
             base.LoadContent();
-
-            gameState.LoadContent();
         }
 
         protected override void UnloadContent()
@@ -56,17 +46,20 @@ namespace Prototype
 
         protected override void Update(GameTime gameTime)
         {
+            if (previousGameState == EGameState.None)
+                HandleGameState();
+
             kState = Keyboard.GetState();
             currentGameState = gameState.Update(kState, previousState);
-
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || kState.IsKeyDown(Keys.Escape))
-            {
-                currentGameState = EGameState.None;
-            }
 
             if (currentGameState != previousGameState)
             {
                 HandleGameState();
+            }
+
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || kState.IsKeyDown(Keys.Escape))
+            {
+                currentGameState = EGameState.None;
             }
 
             base.Update(gameTime);
@@ -85,8 +78,9 @@ namespace Prototype
             switch (currentGameState)
             {
                 case EGameState.MainMenu:
+                    if(gameState != null)
                     gameState.UnLoadContent();
-                    gameState = new InGame(graphics, GraphicsDevice, Content);
+                    gameState = new MainMenu(graphics, GraphicsDevice, Content);
                     gameState.LoadContent();
                     gameState.Initialize();
                     break;

@@ -96,6 +96,7 @@ namespace Prototype
             
             System.Diagnostics.Debug.WriteLine("MousePos.X: " + mState.X);
             System.Diagnostics.Debug.WriteLine("MousePos.Y: " + mState.Y);
+            System.Diagnostics.Debug.WriteLine("MouseWheel: " + mState.ScrollWheelValue);
 
             Mouse.SetPosition(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight / 2);
             pmState = Mouse.GetState();
