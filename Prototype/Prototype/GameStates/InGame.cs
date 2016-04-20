@@ -91,7 +91,7 @@ namespace Prototype.GameStates
         bool pressed;
         float aspectRatio;
 
-        int Score = 0;
+        int _score = 0;
 
         Plane plane;
         Texture2D planeTexture;
@@ -160,7 +160,7 @@ namespace Prototype.GameStates
 
             float fieldOfView = MathHelper.ToRadians(90f);
             float nearClipPlane = 1;
-            float farClipPlane = 200;
+            float farClipPlane = 1000;
 
             effect.Projection = Matrix.CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearClipPlane, farClipPlane);
 
@@ -213,7 +213,7 @@ namespace Prototype.GameStates
             horse.Rotate(camera.Front);
         }
 
-        public EGameState Update(KeyboardState kState, KeyboardState previousState, GameTime gameTime)
+        public EGameState Update(KeyboardState kState, KeyboardState previousState, GameTime gameTime, ref int Score)
         {
             UpdateKeyboard(kState);
 
@@ -233,6 +233,7 @@ namespace Prototype.GameStates
                     dragons.RemoveAt(i--);
                 }
 
+            _score = Score;
             return EGameState.InGame;
         }
 
@@ -245,7 +246,7 @@ namespace Prototype.GameStates
             DrawGround();
 
             sBatch.Begin();
-            sBatch.DrawString(font, "Score: " + Score, new Vector2(0, 0), Color.Black);
+            sBatch.DrawString(font, "Score: " + _score, new Vector2(0, 0), Color.Black);
             sBatch.End();
 
             gDevice.DepthStencilState = DepthStencilState.Default;

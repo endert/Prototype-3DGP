@@ -73,7 +73,7 @@ namespace Prototype
 
                     float fieldOfView = MathHelper.ToRadians(90f);
                     float nearClipPlane = 1;
-                    float farClipPlane = 200;
+                    float farClipPlane = 1000;
 
                     effect.Projection = Matrix.CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearClipPlane, farClipPlane);
                 }

@@ -54,7 +54,7 @@ namespace Prototype.GameStates
             Dispose();
         }
 
-        public EGameState Update(KeyboardState kState, KeyboardState pk, GameTime gt)
+        public EGameState Update(KeyboardState kState, KeyboardState pk, GameTime gt, ref int Score)
         {
             if (kState.IsKeyDown(Keys.Enter))
                 return EGameState.InGame;
