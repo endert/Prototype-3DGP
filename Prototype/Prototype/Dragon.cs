@@ -15,6 +15,9 @@ namespace Prototype
     {
         Model model;
         float angle;
+        int PosX;
+        int PosZ;
+        bool turn;
         public BoundingSphere Boundingsphere
         {
             get
@@ -25,9 +28,12 @@ namespace Prototype
             }
         }
 
-        public void Initialize(ContentManager contentManager)
+        public void Initialize(ContentManager contentManager, int x, int z, bool circle)
         {
             model = contentManager.Load<Model>("Dragon 2.5_fbx");
+            PosX = x;
+            PosZ = z;
+            turn = circle;
         }
 
         public void Update(GameTime gameTime)
@@ -37,18 +43,17 @@ namespace Prototype
 
         Matrix GetWorldMatrix()
         {
-            const float circleRadius = 80;
-            const float heightOffGround = 3;
-            Position = new Vector3(circleRadius, 0, heightOffGround);
+            Position = new Vector3(PosX, 0, PosZ);
 
-            Matrix translationMatrix = Matrix.CreateTranslation(circleRadius, 0, heightOffGround);
-
+            Matrix translationMatrix = Matrix.CreateTranslation(PosX, 0, PosZ);
+            
             Matrix rotationMatrix = Matrix.CreateRotationY(angle);
             Matrix combined = translationMatrix * rotationMatrix;
 
             Position = Vector3.Transform(Position, rotationMatrix);
-
-            return combined;
+            if (turn)
+                return combined;
+            else return translationMatrix;
         }
 
         public void Dispose()

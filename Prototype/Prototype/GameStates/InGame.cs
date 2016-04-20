@@ -124,9 +124,16 @@ namespace Prototype.GameStates
             dragons = new List<Dragon>();
 
             Dragon addedDragon = new Dragon();
-            addedDragon.Initialize(Content);
+            Dragon dragonTwo = new Dragon();
+            Dragon dragonTree = new Dragon();
+
+            addedDragon.Initialize(Content, 100, 100, true);
+            dragonTwo.Initialize(Content, 200, 100, false);
+            dragonTree.Initialize(Content, -50, -300, false);
 
             dragons.Add(addedDragon);
+            dragons.Add(dragonTwo);
+            dragons.Add(dragonTree);
 
 
             horse = new Horse();
