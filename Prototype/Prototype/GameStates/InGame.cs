@@ -85,7 +85,7 @@ namespace Prototype.GameStates
         ContentManager Content;
         float angle = 0;
         Camera camera;
-        Dragon dragon;
+        List<Dragon> dragons;
         Horse horse;
         Vector3 moveVector;
         bool pressed;
@@ -121,8 +121,13 @@ namespace Prototype.GameStates
             effect = new BasicEffect(gDevice);
             camera.Initialize();
 
-            dragon = new Dragon();
-            dragon.Initialize(Content);
+            dragons = new List<Dragon>();
+
+            Dragon addedDragon = new Dragon();
+            addedDragon.Initialize(Content);
+
+            dragons.Add(addedDragon);
+
 
             horse = new Horse();
             horse.Initialize(Content);
@@ -213,20 +218,29 @@ namespace Prototype.GameStates
             UpdateKeyboard(kState);
 
             camera.Update(kState, previousState);
-            dragon.Update(gameTime);
+
+            foreach (Dragon d in dragons)
+                d.Update(gameTime);
 
             previousState = kState;
 
-            System.Diagnostics.Debug.WriteLine("Clear");
-            if (dragon.Boundingsphere.Intersects(horse.Boundingsphere))
-                System.Diagnostics.Debug.WriteLine("COLLISION");
+            //System.Diagnostics.Debug.WriteLine("Clear");
+
+            for(int i = 0; i< dragons.Count; ++i)
+                if (dragons[i].Boundingsphere.Intersects(horse.Boundingsphere))
+                {
+                    Score++;
+                    dragons.RemoveAt(i--);
+                }
 
             return EGameState.InGame;
         }
 
         public void Draw()
         {
-            dragon.Draw(camera.CamaraPosition, aspectRatio, camera);
+            foreach (Dragon d in dragons)
+                d.Draw(camera.CamaraPosition, aspectRatio, camera);
+
             horse.Draw(camera.CamaraPosition, aspectRatio, camera);
             DrawGround();
 
@@ -243,7 +257,7 @@ namespace Prototype.GameStates
             gDevice = null;
             Content = null;
             camera.Dispose();
-            dragon = null;
+            dragons = null;
             horse = null;
         }
     }

@@ -51,6 +51,11 @@ namespace Prototype
             return combined;
         }
 
+        public void Dispose()
+        {
+            model = null;
+        }
+
         public void Draw(Vector3 cameraPosition, float aspectRatio, Camera camera)
         {
             foreach (var mesh in model.Meshes)

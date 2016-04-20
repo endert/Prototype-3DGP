@@ -17,6 +17,8 @@ namespace Prototype
         EGameState previousGameState = EGameState.None;
         IGameState gameState;
 
+        int Score;
+
 
         public Test3DDemo()
         {
