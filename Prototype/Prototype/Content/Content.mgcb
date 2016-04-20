@@ -87,3 +87,9 @@
 /processorParam:TextureFormat=DxtCompressed
 /build:Horse.fbx
 
+#begin Score.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:Score.spritefont
+

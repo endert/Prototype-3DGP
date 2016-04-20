@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -6,7 +7,6 @@ using Prototype.GameStates;
 
 namespace Prototype
 {
-
     public class Test3DDemo : Game
     {
         GraphicsDeviceManager graphics;

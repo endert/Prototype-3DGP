@@ -17,7 +17,6 @@ namespace Prototype.GameStates
         GraphicsDevice gDevice;
         ContentManager Content;
         Texture2D pressEnter;
-       
 
         public MainMenu(GraphicsDeviceManager g, GraphicsDevice gD, ContentManager content)
         {
@@ -34,7 +33,7 @@ namespace Prototype.GameStates
             graphics.GraphicsDevice.Clear(Color.CornflowerBlue);
 
             spriteBatch.Begin();
-            spriteBatch.Draw(pressEnter, new Vector2(graphics.PreferredBackBufferHeight / 2, graphics.PreferredBackBufferWidth / 2), origin: new Vector2(pressEnter.Width / 2, pressEnter.Height / 2));
+            spriteBatch.Draw(pressEnter, new Vector2(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight / 2), origin: new Vector2(pressEnter.Width / 2, pressEnter.Height / 2));
             spriteBatch.End();
         }
 

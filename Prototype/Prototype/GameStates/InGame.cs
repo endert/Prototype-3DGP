@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Prototype.GameStates
 {
-    class GameObject
+    abstract class GameObject
     {
         public Vector3 Position { get; protected set; }
     }
@@ -91,10 +91,13 @@ namespace Prototype.GameStates
         bool pressed;
         float aspectRatio;
 
+        int Score = 0;
+
         Plane plane;
         Texture2D planeTexture;
-
+        SpriteBatch sBatch;
         BasicEffect effect;
+        SpriteFont font;
 
         public InGame(GraphicsDeviceManager g, GraphicsDevice gD, ContentManager content)
         {
@@ -111,6 +114,8 @@ namespace Prototype.GameStates
 
         public void Initialize()
         {
+            sBatch = new SpriteBatch(gDevice);
+
             moveVector = new Vector3(0, 0, 0);
             
             effect = new BasicEffect(gDevice);
@@ -131,6 +136,7 @@ namespace Prototype.GameStates
         {
             planeTexture = new Texture2D(gDevice, (int)plane.Width, (int)plane.Heigth);
             planeTexture.SetData<Color>(plane.TextureData);
+            font = Content.Load<SpriteFont>("Score");
         }
 
         public void UnLoadContent()
@@ -149,7 +155,7 @@ namespace Prototype.GameStates
 
             float fieldOfView = MathHelper.ToRadians(90f);
             float nearClipPlane = 1;
-            float farClipPlane = 2000;
+            float farClipPlane = 200;
 
             effect.Projection = Matrix.CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearClipPlane, farClipPlane);
 
@@ -223,6 +229,12 @@ namespace Prototype.GameStates
             dragon.Draw(camera.CamaraPosition, aspectRatio, camera);
             horse.Draw(camera.CamaraPosition, aspectRatio, camera);
             DrawGround();
+
+            sBatch.Begin();
+            sBatch.DrawString(font, "Score: " + Score, new Vector2(0, 0), Color.Black);
+            sBatch.End();
+
+            gDevice.DepthStencilState = DepthStencilState.Default;
         }
 
         public void Dispose()
