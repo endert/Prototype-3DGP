@@ -56,6 +56,11 @@ namespace Prototype.GameStates
 
         public EGameState Update(KeyboardState kState, KeyboardState pk, GameTime gt, ref int Score)
         {
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || kState.IsKeyDown(Keys.Escape))
+            {
+                return EGameState.Credits;
+            }
+
             if (kState.IsKeyDown(Keys.Enter))
                 return EGameState.InGame;
             else

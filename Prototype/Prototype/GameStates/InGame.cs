@@ -222,6 +222,11 @@ namespace Prototype.GameStates
 
         public EGameState Update(KeyboardState kState, KeyboardState previousState, GameTime gameTime, ref int Score)
         {
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || kState.IsKeyDown(Keys.Escape))
+            {
+                return EGameState.Credits;
+            }
+
             UpdateKeyboard(kState);
 
             camera.Update(kState, previousState);
@@ -236,7 +241,7 @@ namespace Prototype.GameStates
             for(int i = 0; i< dragons.Count; ++i)
                 if (dragons[i].Boundingsphere.Intersects(horse.Boundingsphere))
                 {
-                    Score++;
+                    Score+= 100;
                     dragons.RemoveAt(i--);
                 }
 

@@ -55,11 +55,6 @@ namespace Prototype
 
             currentGameState = gameState.Update(kState, previousState, gameTime, ref Score);
 
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || kState.IsKeyDown(Keys.Escape))
-            {
-                currentGameState = EGameState.None;
-            }
-
             if (currentGameState != previousGameState)
             {
                 HandleGameState();
@@ -70,7 +65,11 @@ namespace Prototype
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            if (currentGameState != EGameState.Credits)
+                GraphicsDevice.Clear(Color.CornflowerBlue);
+            else
+                GraphicsDevice.Clear(Color.FloralWhite);
+
             gameState.Draw();
 
             base.Draw(gameTime);
@@ -91,6 +90,13 @@ namespace Prototype
                 case EGameState.InGame:
                     gameState.UnLoadContent();
                     gameState = new InGame(graphics, GraphicsDevice, Content);
+                    gameState.LoadContent();
+                    gameState.Initialize();
+                    break;
+
+                case EGameState.Credits:
+                    gameState.UnLoadContent();
+                    gameState = new Credits(Score, graphics, GraphicsDevice, Content);
                     gameState.LoadContent();
                     gameState.Initialize();
                     break;

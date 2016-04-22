@@ -111,6 +111,12 @@ namespace Prototype
 
             CamaraPosition += (mState.Y - pmState.Y) * new Vector3(0, 1, 0);
 
+            if (CamaraPosition.Y <= 1)
+                CamaraPosition = new Vector3(CamaraPosition.X, 1, CamaraPosition.Z);
+
+            if(CamaraPosition.Y > 30)
+                CamaraPosition = new Vector3(CamaraPosition.X, 30, CamaraPosition.Z);
+
             if ((CamaraLookAt - CamaraPosition).Length() > 100)
             {
                 CamaraPosition = CamaraLookAt + (100 / (CamaraLookAt - CamaraPosition).Length()) * (CamaraPosition - CamaraLookAt);
